@@ -11,5 +11,4 @@ $user_id = new MongoId($_POST['user_id']);
 $collection = $database-> selectCollection('users');
 $collection->update(array("_id" => $user_id),array('$addToSet' => array("friends"=>$friend_id)));
 $collection->update(array("_id" => $friend_id),array('$addToSet' => array("friends"=>$user_id)));
-
 ?> 
