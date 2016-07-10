@@ -4,6 +4,7 @@
 //Function to insert new post
 function new_post(user_session_id) 
 {    
+
     //Getting the post text
 	var new_post_text = $('#post_textarea').val();
     //if condition to ckeck if the user has not entered blank comment
@@ -12,7 +13,6 @@ function new_post(user_session_id)
 	    alert("Please enter some text in the post");
 		return;	
 	} 
-    
     //Insert_new_post.php contains php script to insert new post
     var insert_new_post_filename='php_scripts/insert_new_post.php'; 
     //Ajax POST request to call insert_new_post.php
@@ -26,9 +26,16 @@ function new_post(user_session_id)
     	$("#"+new_post_id).hide().slideDown();
         //clearing the post text area after inserting the post 
 	    $('#post_textarea').val(null);
+	    $('div.dz-success').remove();
 	});   
 }
-    
+  
+//Function to to make private post        
+function post_make_private(post_id)
+{
+	$.post('php_scripts/update_post_privacy.php',{post_id: post_id},function(){});
+}
+
 //Function to like/unlike post        
 function post_like_unlike(post_id_like_unlike,user_session_id)
 {
@@ -101,6 +108,5 @@ function new_comment(comment_box_id,return_key_event,user_session_id)
         	}); 	
       }	
 };
-
-
+//////////////////////
 

@@ -38,34 +38,34 @@ if ($postedUsername == $storedUsername) {
 	if (isset ( $_POST ["submit"] )) {
 		$check = getimagesize ( $_FILES ["fileToUpload"] ["tmp_name"] );
 		if ($check !== false) {
-			echo "File is an image - " . $check ["mime"] . ".";
+			//echo "File is an image - " . $check ["mime"] . ".";
 			$uploadOk = 1;
 		} else {
-			echo "File is not an image.";
+			//echo "File is not an image.";
 			$uploadOk = 0;
 		}
 	}
 	// Check file size
 	if ($_FILES ["fileToUpload"] ["size"] > 5000000) {
-		echo "Sorry, your file is too large.";
+		//echo "Sorry, your file is too large.";
 		$uploadOk = 0;
 	}
 	// Allow certain file formats
 	if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-		echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+		//echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
 		$uploadOk = 0;
 	}
 	// Check if $uploadOk is set to 0 by an error
 	if ($uploadOk == 0) {
-		echo "Sorry, your file was not uploaded.";
+		//echo "Sorry, your file was not uploaded.";
 		$picture = "profile_pic.jpg"; // regular pic
 		// if everything is ok, try to upload file
 	} else {
 		if (move_uploaded_file ( $_FILES ["fileToUpload"] ["tmp_name"], $target_file )) {
-			echo "The file " . basename ( $_FILES ["fileToUpload"] ["name"] ) . " has been uploaded.";
+			//echo "The file " . basename ( $_FILES ["fileToUpload"] ["name"] ) . " has been uploaded.";
 			$picture = basename ( $_FILES ["fileToUpload"] ["name"]);
 		} else {
-			echo "Sorry, there was an error uploading your file.";
+			//echo "Sorry, there was an error uploading your file.";
 		}
 	}
 	// createThumb from pic
@@ -100,8 +100,6 @@ function createThumbs( $pathToImages, $pathToThumbs, $thumbWidth,$picture )
 		// continue only if this is a JPEG image
 		if ( (strtolower($info['extension']) == 'jpg') && ($picture == $fname ) )
 		{
-			echo "Creating thumbnail for {$fname} <br />";
-
 			// load image and get image size
 			$img = imagecreatefromjpeg( "{$pathToImages}{$fname}" );
 			$width = imagesx( $img );
