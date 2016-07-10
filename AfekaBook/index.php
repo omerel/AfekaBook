@@ -26,6 +26,7 @@ include ('mongo_connection.php');
 $userDataBaseSelect = $database->users;
 $usersDataBase = $userDataBaseSelect->find ();
 ?>
+
 <script type="text/javascript">
 
 $(function(){
@@ -42,7 +43,7 @@ $(function(){
 	    onSelect: function (suggestion) {
 		    var new_friend_id = suggestion.data;
 		    var user_id ="<?php echo $_SESSION['user_id']; ?>";
-		    alert( "The user "+suggestion.value+" has become your friend" );
+		    alert( suggestion.value+" has become your friend" );
 		   	$.post('php_scripts/add_friend.php',{friend_id: new_friend_id,user_id:user_id},function(){});
 		   	window.location = "index.php";
 	    }
@@ -61,12 +62,17 @@ $(function(){
 		<!-- Serach field control -->
 		<li class="li_menu" style="float: right"><a class="active"
 			href="logOut.php">LogOut</a></li>
+		<li class="li_menu" style="float: right"><img
+			class="profile_picture_top"
+			src="images/<?php echo $_SESSION['user_profile_pic']; ?>" /></li>
+		<li class="li_menu" style="float: right"><p class="a_menu">Hello <?php echo $_SESSION['user_name'];?> |</p></li>
 		<li id="searchfield"><input type="text" name="currency"
 			class="biginput" id="autocomplete"
 			placeholder="Find users and add them as a friend"></li>
 	</ul>
 	<!-- ul_menu_bar ends -->
 
+<div id="home"><br><br></div>
 	<div id="div_main">
 		<!--div_new_post for section to create new post -->
 		<div id="div_new_post" class="div_new_post">

@@ -1,23 +1,24 @@
 <!-- Code created By Omer Elgrably and Barr Inbar  -->
 <!-- Contribution code:  Ashish Trivedi -->
 <?php
-session_start ();
-// connect to mongodb
-$m = new MongoClient ();
-// select a database
-$db = $m->project;
-// select users collection
-$collection = $db->createCollection ( "users" );
+if (session_status() != PHP_SESSION_ACTIVE)
+	session_start ();
 
-// initialize wrongName varible for used user ( if user exist wrongName = 1 else 0)
+// including common mongo connection file
+include ('mongo_connection.php');
+
+// select users collection
+$collection = $database->createCollection ( "users" );
+
+// initialize wrongName variable for used user ( if user exist wrongName = 1 else 0)
 $_SESSION['wrongName']=0;
 
 $postedUsername = $_POST ['username']; // Gets the posted username, put's it into a variable.
-$userDatabaseSelect = $db->users; // Selects the users collection
-$userDatabaseFind = $userDatabaseSelect->find ( array (
-		'name' => $postedUsername 
-) ); // Does a search for Usernames with the posted Username Variable
-     
+$userDatabaseSelect = $database->users; // Selects the users collection
+$userDatabaseFind = $userDatabaseSelect->find (array('name' => $postedUsername)); // Does a search for Usernames with the posted Username Variable
+
+$storedUsername=NULL;
+
 // Iterates through the found results
 foreach ( $userDatabaseFind as $userFind ) {
 	$storedUsername = $userFind ['name'];
@@ -27,8 +28,15 @@ if ($postedUsername == $storedUsername) {
 	$_SESSION['wrongName']=1;
 } else {
 	// if user exist wrongName = 0
-	$_SESSION['wrongName']=0; 
+	$_SESSION['wrongName']=0;
 	
+	// Check password retyped properly
+	if ($_POST['password'] != $_POST['re_password'])
+	{
+		$_SESSION['wrongRePass']=1;
+	} else {
+		$_SESSION['wrongRePass']=0;
+		
 	// upload picture
 	$target_dir = "images/";
 	$target_file = $target_dir . basename ( $_FILES ["fileToUpload"] ["name"] );
@@ -38,10 +46,10 @@ if ($postedUsername == $storedUsername) {
 	if (isset ( $_POST ["submit"] )) {
 		$check = getimagesize ( $_FILES ["fileToUpload"] ["tmp_name"] );
 		if ($check !== false) {
-			//echo "File is an image - " . $check ["mime"] . ".";
+			// "File is an image - " . $check ["mime"] . ".";
 			$uploadOk = 1;
 		} else {
-			//echo "File is not an image.";
+			// "File is not an image.";
 			$uploadOk = 0;
 		}
 	}
@@ -74,7 +82,7 @@ if ($postedUsername == $storedUsername) {
 	// create new document with the new posted details
 	$document = array (
 			"_id" => new MongoId (),
-			"password" => $_POST ['password'],
+			"password" => $password = password_hash($_POST ['password'], PASSWORD_DEFAULT),
 			"name" => $_POST ['username'],
 			"profile_pic" => $picture,
 			"friends" => array()
@@ -85,7 +93,7 @@ if ($postedUsername == $storedUsername) {
 	$user_id = $collection->findOne(array('name' => $_POST ['username']));
 	$user_id = $user_id['_id'];
 	$collection->update(array("_id" => $user_id),array('$addToSet' => array("friends"=>$user_id)));
-	
+	}
 }
 
 function createThumbs( $pathToImages, $pathToThumbs, $thumbWidth,$picture )

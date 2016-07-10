@@ -155,9 +155,15 @@ body {
 
 .comment_author_profile_picture img {
 	width: 25px;
-	height: 25px
+	height: 25px;
+	
 }
 
+.profile_picture_top {
+	width: 30px;
+	height: 30px;
+	margin-top: 6px;
+}
 .comment_text {
 	padding-left: 40px;
 	color: #555;
@@ -203,6 +209,10 @@ hr.soften {
 	padding: 0px;
 	overflow: hidden;
 	background-color: #667fb2;
+	position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
 }
 
 .li_menu {
@@ -271,7 +281,7 @@ background-color
 	-webkit-transition: all 0.2s linear;
 	-moz-transition: all 0.2s linear;
 	transition: all 0.2s linear;
-	margin-top: 5px;
+	margin-top: 7px;
 }
 
 .biginput:focus {
